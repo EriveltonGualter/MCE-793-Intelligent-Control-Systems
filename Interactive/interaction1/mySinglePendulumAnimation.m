@@ -22,7 +22,6 @@ while time < t(end)
         pole = plot([x1,posDraw(1,1)], [y1,posDraw(2,1)], 'LineWidth',4, 'Color',[0.2, 0.7, 0.2]);
         axis equal; axis(extents); axis on;      %  <-- Order is important here
         drawnow;
-        pause(1/40);
     end
     
     % Update current time

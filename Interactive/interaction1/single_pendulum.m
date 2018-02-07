@@ -7,14 +7,14 @@ clear all, close all
 % Parameters
 m = 1;      % mass rod [kg]
 l = 1;      % length rod [m]
-g = 9.81;   % gravitacional acceleration [m/s2]
+g = -9.81;   % gravitacional acceleration [m/s2]
 
 I = m*l^2/12;
 r = l/2;
 
 % Simulation parameters
 tf = 5;     % Final time [s]
-dt = 1e-5;  % Integration step size [s]
+dt = 1e-3;  % Integration step size [s]
 t = 0:dt:tf; % array time
 
 % Initial Conditional
@@ -27,6 +27,7 @@ for i=1 : length(t)-1
     
     x1 = X(1,i);
     x2 = X(2,i);  
+    
     
     xd1 = x2;
     xd2 = -m*g*r*sin(x1) / (m*r^2+I);    
