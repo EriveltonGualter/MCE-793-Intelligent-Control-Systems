@@ -1,6 +1,14 @@
-% Erivelton Gualter dos Santos
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GUALTERhw1.m
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Description: Homework 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Author: Erivelton Gualter
+% Date created: 1/24/17
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-clc, clear all, close all
+clear all
+close all
 
 % Bayesian Regression %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -38,6 +46,14 @@ for k=1:size(T)
     % MN : Posterior Mean% Posterior Mean
 end
 
+figure; plot(MN, 'LineWidth', 2); 
+title('Part (a1)', 'interpreter', 'latex', 'FontSize', 14);
+xlim([0 length(T)]);
+
+figure; hold on; plot(var(:,1), 'LineWidth', 4); plot(var(:,2), 'LineWidth', 2); 
+title('Part (a2)', 'interpreter', 'latex', 'FontSize', 14);
+legend('var1', 'var2'); 
+xlim([0 length(T)]);
 
 %%
 Phi = [g*cos(q)/2 qDDOT/3];
@@ -64,11 +80,11 @@ tstep = 1e-3; % Time Step [s]
 X10 = qDes(1);
 X20 = qDotDes(1);
 
-dif = 0;
+rmserror = 0;
 X = [X10; X20];
 for k=1 : length(time)-1
         
-    dif = dif + (X(1,k)-qDes(k))^2;
+    rmserror = rmserror + (X(1,k)-qDes(k))^2;
     
     x1 = X(1,k);
     x2 = X(2,k);
@@ -81,12 +97,18 @@ for k=1 : length(time)-1
     XDOT = [xd1; xd2];
     
     X(:,k+1) = X(:,k) + XDOT*tstep;
-    
-
 end
 
-rmserror = rms(X(1,:)'-qDes);
-dif
+figure; hold on;
+plot(time, X(1,:)', 'LineWidth', 2);
+plot(time, qDes, '--', 'LineWidth', 2);
+
+xlabel('Time [s]', 'interpreter', 'latex', 'FontSize', 14);
+ylabel('Angle', 'interpreter', 'latex', 'FontSize', 14);
+title('Part (b1)', 'interpreter', 'latex', 'FontSize', 14);
+legend('Computed', 'Desired');
+
+rmserror = sqrt(rmserror);
 display(['Part (b2): rms error = ',num2str(rmserror)])
 
 %% Simulation 1
@@ -118,17 +140,20 @@ while timesim < tsim(end)
     
     % Update current time
     timesim = toc;
-end 
+end
 
-% Computed Torque Control with Feedback %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Computed Torque Control with Feedback %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-X10 = qDes(1)*1;
-X20 = 0;
+X10 = qDes(1);
+X20 = qDotDes(1);
 
-Kp = 120; Kd = 10;
+Kp = 120; Kd = 15;
 
 X = [X10; X20];
+rmserror = 0;
 for k=1 : length(time)-1
+    
+    rmserror = rmserror + (X(1,k)-qDes(k))^2;
     
     x1 = X(1,k);
     x2 = X(2,k);
@@ -143,8 +168,16 @@ for k=1 : length(time)-1
     X(:,k+1) = X(:,k) + XDOT*tstep;
 end
 
-rmserror = rms(X(1,:)'-qDes);
+figure; hold on;
+plot(time, X(1,:)', 'LineWidth', 2);
+plot(time, qDes, '--', 'LineWidth', 2);
 
+xlabel('Time [s]', 'interpreter', 'latex', 'FontSize', 14);
+ylabel('Angle', 'interpreter', 'latex', 'FontSize', 14);
+title('Part (c1)', 'interpreter', 'latex', 'FontSize', 14);
+legend('Computed', 'Desired');
+
+rmserror = sqrt(rmserror);
 display(['Part (c2): rms error = ',num2str(rmserror)])
 
 %% Simulation 2
@@ -178,34 +211,6 @@ while timesim < tsim(end)
     % Update current time
     timesim = toc;
 end 
-
-%% Plots
-figure; plot(MN, 'LineWidth', 2); 
-title('Part (a1)', 'interpreter', 'latex', 'FontSize', 14);
-xlim([0 length(T)]);
-
-figure; plot(var, 'LineWidth', 2); 
-title('Part (a2)', 'interpreter', 'latex', 'FontSize', 14);
-xlim([0 length(T)]);
-
-figure; hold on;
-plot(time, X(1,:)', 'LineWidth', 2);
-plot(time, qDes, '--', 'LineWidth', 2);
-
-xlabel('Time [s]', 'interpreter', 'latex', 'FontSize', 14);
-ylabel('Angle', 'interpreter', 'latex', 'FontSize', 14);
-title('Part (b1)', 'interpreter', 'latex', 'FontSize', 14);
-legend('Computed', 'Desired');
-
-figure; hold on;
-plot(time, X(1,:)', 'LineWidth', 2);
-plot(time, qDes, '--', 'LineWidth', 2);
-
-xlabel('Time [s]', 'interpreter', 'latex', 'FontSize', 14);
-ylabel('Angle', 'interpreter', 'latex', 'FontSize', 14);
-title('Part (c1)', 'interpreter', 'latex', 'FontSize', 14);
-legend('Computed', 'Desired');
-
 
 %% Draw function
 function draw(pxact, pyact, pxdes, pydes, flag)
