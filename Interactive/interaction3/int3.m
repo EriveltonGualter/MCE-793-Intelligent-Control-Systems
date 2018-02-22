@@ -28,13 +28,13 @@ display([' qDot should be between ',num2str(qDot_min), ' and ',num2str(qDot_max)
 display(['qDDot should be between ',num2str(qDDOT_min), ' and ',num2str(qDDOT_max)]);
 
 ranges = [qrange; qDotrange; dDDotrange];
-%ranges = sort(ranges)
+ranges = sort(ranges)
 
 % Probably it should be 4x4 bc we have 1 in the first pos, but it is 3x3
 M = diag([1; 1./ranges])
 
 % Parameter to tune: (Bandwidth hyperparameter) 
-h = 0.005;
+h = 0.002;
 
 X = [1; q; qDot; qDDOT];
 
