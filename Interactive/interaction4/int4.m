@@ -24,9 +24,9 @@ hold on
 Ks1 = zeros(1,length(x));
 Ks2 = zeros(length(x),1);
 for i=1:length(x)
-    for ii=1:length(x)
-        Ks1(1,ii) = cov_func(x(ii,:)', x(i,:)', p1, p2);
-        Ks2(ii,1) = cov_func(x(i,:)', x(ii,:)', p1, p2);
+    for j=1:length(x)
+        Ks1(1,j) = cov_func(x(j,:)', x(i,:)', p1, p2);
+        Ks2(j,1) = cov_func(x(i,:)', x(j,:)', p1, p2);
     end
     fhat(1,i) = Ks1*inv(K+sigma*eye(size(K)))*y;
     
